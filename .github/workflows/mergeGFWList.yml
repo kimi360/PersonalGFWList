@@ -1,0 +1,63 @@
+name: Merge GFW List
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  push:
+    branches: [ "main" ]
+    paths: [ "custom.txt", ".github/workflows/gfwlist.yml" ]
+  workflow_dispatch: ~
+
+env:
+  TARGET_BRANCH: release
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+
+    - name: Generate gfwlist
+      run: |
+        chmod +x scripts/*.sh
+        scripts/mergeGFWList.sh user-rules.txt /tmp/gfwlist.txt
+        git reset --hard
+
+    - name: Ensure gfwlist branch exists
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+        if ! git ls-remote --exit-code origin "${TARGET_BRANCH}" >/dev/null 2>&1; then
+          git checkout --orphan "${TARGET_BRANCH}"
+          git rm -rf . >/dev/null 2>&1 || true
+          git commit --allow-empty -m "chore(workflow): 初始化 ${TARGET_BRANCH} 分支"
+          git push --set-upstream origin "${TARGET_BRANCH}"
+        else
+          git fetch origin "${TARGET_BRANCH}":"${TARGET_BRANCH}"
+          git checkout "${TARGET_BRANCH}"
+        fi
+
+        mv /tmp/gfwlist.txt .
+
+    - name: Commit and push gfwlist
+      uses: EndBug/add-and-commit@v9.1.4
+      with:
+        default_author: github_actions
+        message: "chore(workflow): 自动更新 gfwlist"
+        add: '["gfwlist.txt"]'
+        push: "--set-upstream origin ${{ env.TARGET_BRANCH }}"
+
+    - name: Send Webhook
+      uses: joelwmale/webhook-action@2.4.1
+      with:
+        url: ${{ secrets.WEBHOOK_URL }}
+        headers: |
+          {
+            "Accept": "application/vnd.github.everest-preview+json",
+            "Authorization": "Bearer ${{ secrets.WEBHOOK_TOKEN }}",
+            "Content-Type": "application/json"
+          }
+        body: '{"ref":"main"}'
