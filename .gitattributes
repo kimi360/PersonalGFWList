@@ -1,0 +1,7 @@
+# 设置默认行为：强制所有文本文件始终使用 LF
+* text=auto eol=lf
+
+# 明确声明为文本并统一使用 LF 的文件类型
+*.md text eol=lf
+*.sh text eol=lf
+*.txt text eol=lf
