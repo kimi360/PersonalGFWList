@@ -4,7 +4,7 @@ on:
     - cron: '0 */6 * * *'
   push:
     branches: [ "main" ]
-    paths: [ "custom.txt", ".github/workflows/gfwlist.yml" ]
+    paths: [ "user-rules.txt", ".github/workflows/gfwlist.yml" ]
   workflow_dispatch: ~
 
 env:
