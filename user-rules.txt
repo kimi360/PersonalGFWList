@@ -23,6 +23,7 @@
 ||store.rg-adguard.net
 ||thisvid.com
 ||torrentkitty.net
+||torrentz2.nz
 ||ttrss.henry.wang
 ||yfsp.tv65
 !################User Rules End#################
