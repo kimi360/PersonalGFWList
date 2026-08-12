@@ -1,17 +1,23 @@
 !###############User Rules Start################
 ||annas-archive.org
 ||bitwarden.com
+||bitwarden.eu
 ||c2.synology.com
 ||dos.zczc.cz
+||evoxt.com
+||h2cdn.appinn.me
 ||hammerspoon.org
 ||hcaptcha.com
 ||iyf.tv
 ||linux.do
+||meta.appinn.net
 ||missav.com
 ||openart.ai
+||openrouter.ai
 ||pikpak.com
 ||ppgg.in
 ||rnengage.com
+||rsshub.kimi360.top
 ||seedhub.cc
 ||sehuatang.net
 ||singlelogin.re
